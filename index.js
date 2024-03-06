@@ -1,23 +1,34 @@
-// index.js
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 6000;
+const PORT = 8000;
+
+// middle ware plugin 
+app.use(express.urlencoded({extended: false}));
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/savedzipcodedatabase', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect('mongodb://localhost:27017/savedzipcodedatabase')
+.then(() => console.log("MongoDB Connected"))
+.catch((error) => console.log("Mongo Error", error))
 
 // Define a schema for the data
 const savedZipCodeSchema = new mongoose.Schema({
-  origin: String,
-  destination: String,
-  distance: String,
-  duration: String,
+  origin: {
+    type: String,
+    required: true,
+  },
+  destination: {
+    type: String,
+    required: true,
+  },
+  distance: {
+    type: String
+  },
+  duration: {
+    type: String
+  },
 });
 const SavedZipCode = mongoose.model('SavedZipCode', savedZipCodeSchema);
 
